@@ -8,10 +8,10 @@ class Assessment:
     weight: float
     mark: float
 
-    def __init__(self, name: str, weight: float) -> None:
+    def __init__(self, name: str, weight: float, mark: float=-1) -> None:
         self.name = name
         self.weight = weight
-        self.mark = -1
+        self.mark = mark
 
     def set_name(self, name: str) -> None:
         self.name = name
