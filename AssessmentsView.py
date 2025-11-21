@@ -24,7 +24,7 @@ class AssessmentView:
         self.grid_frame.grid_columnconfigure(0, weight=3) # Assessment Name. Stretched the longest
         self.grid_frame.grid_columnconfigure(1, weight=1)
         self.grid_frame.grid_columnconfigure(2, weight=1)
-        self.grid_frame.grid_columnconfigure(3, weight=1) # Actions menu containing edit and delete
+        self.grid_frame.grid_columnconfigure(3, weight=0) # Actions menu containing edit and delete
 
         # Exact same method of added headers in their columns like in CourseView.py
         headers = ["Assessment Name", "Grade (%)", "Weight", ""]
@@ -38,8 +38,29 @@ class AssessmentView:
         # Footer with the add button
         footer = tk.Frame(self.window)
         footer.pack(pady=20)
-        add_button = tk.Button(footer, text="➕", font=("Arial", 16))
+        add_button = tk.Button(footer, text="➕", font=("Arial", 16),
+                               command=self.add_assessment)
         add_button.pack()
+
+    def add_assessment(self):
+        """
+        Adds a single row to the assessment grid.
+        """
+        r = self.row_counter
+
+        name = tk.Entry(self.grid_frame, justify='center')
+        name.grid(row=r, column=0, padx=5, pady=10, stick='ew')
+
+        grade = tk.Entry(self.grid_frame, justify='center', width=3)
+        grade.grid(row=r, column=1, padx=5, stick='ew')
+
+        weight = tk.Entry(self.grid_frame, justify='center', width=3)
+        weight.grid(row=r, column=2, padx=5, stick='ew')
+
+        actions = tk.Button(self.grid_frame, text='📝')
+        actions.grid(row=r, column=3, padx=5, stick='ew')
+
+        self.row_counter += 1 # So that a new table gets added in the next row.
 
 if __name__ == "__main__":
     master = tk.Tk()
