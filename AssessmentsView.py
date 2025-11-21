@@ -20,6 +20,21 @@ class AssessmentView:
         self.grid_frame = tk.Frame(self.window)
         self.grid_frame.pack(fill="both", padx=20, expand=True)
 
+        # Create tables manually with the headers (4) and widgets (4)
+        self.grid_frame.grid_columnconfigure(0, weight=3) # Assessment Name. Stretched the longest
+        self.grid_frame.grid_columnconfigure(1, weight=1)
+        self.grid_frame.grid_columnconfigure(2, weight=1)
+        self.grid_frame.grid_columnconfigure(3, weight=1) # Actions menu containing edit and delete
+
+        # Exact same method of added headers in their columns like in CourseView.py
+        headers = ["Assessment Name", "Grade (%)", "Weight", ""]
+        for column_number, text in enumerate (headers):
+            tk.Label(self.grid_frame, text=text, font=('Arial', 10, "bold")).grid(
+                row=0, column=column_number, pady=(0,10), sticky="ew"
+            )
+
+        self.row_counter = 1
+
         # Footer with the add button
         footer = tk.Frame(self.window)
         footer.pack(pady=20)
