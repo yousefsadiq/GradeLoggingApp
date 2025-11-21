@@ -22,7 +22,7 @@ class AssessmentView:
         self.grid_frame.pack(fill="both", padx=20, expand=True)
 
         # Create tables manually with the headers (4) and widgets (4)
-        self.grid_frame.grid_columnconfigure(0, weight=3) # Assessment Name. Stretched the longest
+        self.grid_frame.grid_columnconfigure(0, weight=3) # wide assessment name column
         self.grid_frame.grid_columnconfigure(1, weight=1)
         self.grid_frame.grid_columnconfigure(2, weight=1)
         self.grid_frame.grid_columnconfigure(3, weight=0) # Actions menu containing edit and delete
@@ -34,18 +34,19 @@ class AssessmentView:
                 row=0, column=column_number, pady=(0,10), sticky="ew"
             )
 
-        self.row_counter = 1
+        self.row_counter = 1    # to track rows so we know here to add the new table
 
         # Footer with the add button
         footer = tk.Frame(self.window)
         footer.pack(pady=20)
         add_button = tk.Button(footer, text="➕", font=("Arial", 16),
-                               command=self.add_assessment)
+                               command=self.add_assessment
+                               )
         add_button.pack()
 
     def add_assessment(self):
         """
-        Adds a single row to the assessment grid.
+        Adds a single table row to the assessment grid.
         """
         r = self.row_counter
 
@@ -68,7 +69,7 @@ class AssessmentView:
 
     def delete_row(self, widgets):
         """
-        Confirm and Delete an assessment row
+        Confirm and delete an assessment row
         """
         if messagebox.askyesno("Confirm Delete Assessment",
                 "Are you sure you want to delete this course? "
