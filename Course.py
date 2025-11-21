@@ -6,24 +6,26 @@ from Assessment import Assessment
 
 class Course:
 
-    mark: float
+    desired_mark: float
     name: str
     assessments: list[Assessment]
 
-    def __init__(self, name: str) -> None:
+    def __init__(self) -> None:
         self.mark = -1
-        self.name = name
+        self.desired_mark = -1
+        self.name = ''
         self.assessments = []
-
-    def set_mark(self, name: str, mark: float) -> None:
-        for assessment in self.assessments:
-            if assessment.name == name:
-                assessment.set_mark(mark)
 
     def get_mark(self) -> float:
         if self.assessments:
             return self._calculate_mark()
         return -1
+
+    def set_desired_mark(self, desired_mark: float) -> None:
+        self.desired_mark = desired_mark
+
+    def get_desired_mark(self) -> float:
+        return self.mark
 
     def set_name(self, name: str) -> None:
         self.name = name
@@ -52,8 +54,17 @@ class Course:
     def _calculate_mark(self) -> float:
         marks = []
         for assessment in self.assessments:
-            marks.append((assessment.mark, assessment.weight))
+            if assessment.mark != -1:
+                marks.append((assessment.mark, assessment.weight))
         final_mark = 0
         for mark in marks:
             final_mark += (mark[0] * (mark[1]) / 100)
         return final_mark
+
+    def _calculate_mark_needed(self) -> float:
+        weight = 0
+        for assessment in self.assessments:
+            if assessment.mark != -1:
+                weight += assessment.weight
+        remaining_weight = (100 - weight) / 100
+        return (self.desired_mark - self.get_mark() * weight) / remaining_weight
