@@ -16,4 +16,4 @@ if __name__ == "__main__":
     root = tk.Tk()
     root.withdraw()
     AssessmentView(root, "TEST101") # We do not assign this to a variable as this opens once only and works alone.
-    root.mainloop()                             # It is not connecting to the main window, it is its own separate window.
+    root.mainloop()                             # It is not connecting to the main window, it is its own window.
