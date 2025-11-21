@@ -25,7 +25,7 @@ class CourseView:
                    "Required Grade", "Actions"]
 
         # Configure columns, first column gets more space, others get weight 1
-        self.grid_frame.grid_columnconfigure(0, weight=3)
+        self.grid_frame.grid_columnconfigure(0, weight=5)
         for i in range(1, len(headers)):
             self.grid_frame.grid_columnconfigure(i, weight=1)
 

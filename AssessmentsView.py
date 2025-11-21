@@ -3,6 +3,7 @@ The UI of the Assessments page in the grade logging app
 """
 
 import tkinter as tk
+from tkinter import messagebox
 
 class AssessmentView:
     def __init__(self, master, course_name):
@@ -57,10 +58,23 @@ class AssessmentView:
         weight = tk.Entry(self.grid_frame, justify='center', width=3)
         weight.grid(row=r, column=2, padx=5, stick='ew')
 
-        actions = tk.Button(self.grid_frame, text='📝')
-        actions.grid(row=r, column=3, padx=5, stick='ew')
+        delete_button = tk.Button(self.grid_frame, text='🗑', fg='red',
+                                  command=lambda: self.delete_row(
+            [name, grade, weight, delete_button])
+                  )
+        delete_button.grid(row=r, column=3)
 
         self.row_counter += 1 # So that a new table gets added in the next row.
+
+    def delete_row(self, widgets):
+        """
+        Confirm and Delete an assessment row
+        """
+        if messagebox.askyesno("Confirm Delete Assessment",
+                "Are you sure you want to delete this course? "
+        "This action cannot be undone. You will lose all progress of this assessment."):
+            for widget in widgets:
+                widget.destroy()
 
 if __name__ == "__main__":
     master = tk.Tk()
