@@ -9,12 +9,12 @@ class AssessmentView:
     def __init__(self, master, course_name):
         self.window = tk.Toplevel(master)# a Toplevel widget is used to create a new,
                                         # independent window separate from the main window
-        self.window.title("Assessments" + course_name)
+        self.window.title(course_name + " Assessments")
         self.window.geometry('700x600')
 
         header_frame = tk.Frame(self.window)
         header_frame.pack(fill='x', padx=20, pady=20)
-        tk.Label(header_frame, text=course_name + " Assessments",
+        tk.Label(header_frame, text="Assessments",
                  font=("Arial", 20, "bold")).pack(side='left')
 
         # Frame to hold the assessment rows.
