@@ -1,6 +1,6 @@
-'''
+"""
 The UI of the Courses page in the grade logging app
-'''
+"""
 
 import tkinter as tk
 from tkinter import messagebox as mb
