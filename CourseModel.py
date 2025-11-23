@@ -2,7 +2,7 @@
 A course taken by a student.
 """
 
-from Assessment import Assessment
+from AssessmentModel import Assessment
 
 class Course:
 

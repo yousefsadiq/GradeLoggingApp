@@ -1,8 +1,8 @@
 import sqlite3
 import pickle
 
-from Assessment import Assessment
-from Course import Course
+from AssessmentModel import Assessment
+from CourseModel import Course
 
 class CourseService:
 
