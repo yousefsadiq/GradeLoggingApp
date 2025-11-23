@@ -8,7 +8,7 @@ class Assessment:
     weight: float
     mark: float
 
-    def __init__(self, name: str, weight: float, mark: float=-1) -> None:
+    def __init__(self, name: str="", weight: float=-1, mark: float=-1) -> None:
         self.name = name
         self.weight = weight
         self.mark = mark
@@ -30,3 +30,9 @@ class Assessment:
 
     def get_mark(self) -> float:
         return self.mark
+
+    def __eq__(self, other):
+        if isinstance(other, Assessment):
+            if self.name == other.name and self.weight == other.weight and self.mark == other.mark:
+                return True
+        return False

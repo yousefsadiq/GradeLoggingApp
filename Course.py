@@ -10,11 +10,12 @@ class Course:
     name: str
     assessments: list[Assessment]
 
-    def __init__(self) -> None:
-        self.mark = -1
-        self.desired_mark = -1
-        self.name = ''
-        self.assessments = []
+    def __init__(self, desired_mark: float=-1, name: str="", assessments: list=None) -> None:
+        if assessments is None:
+            assessments = []
+        self.desired_mark = desired_mark
+        self.name = name
+        self.assessments = assessments
 
     def get_mark(self) -> float:
         if self.assessments:
@@ -50,6 +51,12 @@ class Course:
             if assessment.name == name:
                 return assessment
         raise ValueError("Assessment is not in this course.")
+
+    def __eq__(self, other):
+        if isinstance(other, Course):
+            if self.name == other.assessments and self.assessments == other.assessments and self.desired_mark == other.desired_mark:
+                return True
+        return False
 
     def _calculate_mark(self) -> float:
         marks = []
