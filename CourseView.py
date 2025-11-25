@@ -4,11 +4,15 @@ The UI of the Courses page in the grade logging app
 
 import tkinter as tk
 from tkinter import messagebox as mb
-from AssessmentsView import AssessmentView
+from CourseModel import CourseModel
+from AssessmentView import AssessmentView
+from CourseController import CourseController
 
 class CourseView:
     def __init__(self, master):
         self.master = master
+        self.controller = None
+
         master.title("Grade Logging App")
         master.geometry("1000x600")
 
@@ -45,7 +49,13 @@ class CourseView:
                                command=self.add_course_new)
         add_button.pack()
 
-    def add_course_new(self):
+    def set_controller(self, controller: CourseController):
+        """
+        Sets a new CourseController for this CourseView.
+        """
+        self.controller = controller
+
+    def add_course_row(self, course:CourseModel=None):
         """
         Adds a single row to the course grid.
         """
@@ -77,37 +87,42 @@ class CourseView:
         action_frame = tk.Frame(self.grid_frame)
         action_frame.grid(row=r, column=4)
 
+        # Populate data if a course exists
+        if course:
+            name.insert(0, course.name)
+            if course.desired_mark != -1:
+                desired.insert(0, str(course.desired_mark))
+            curr_mark = course.get_mark()
+            if curr_mark != -1:
+                current.config(text=f"{curr_mark:.2f}%")
+            try:
+                req_mark = course._calculate_mark_needed()
+                required.config(text=f"{req_mark:.2f}%")
+            except:
+                required.config(text="--%")
+
+        # Bindings
+        save_callback = lambda e: self.controller.update_course(name, desired)
+        name.bind("<FocusOut>", save_callback)
+        name.bind("<Return>", save_callback)
+        desired.bind("<FocusOut>", save_callback)
+        desired.bind("<Return>", save_callback)
+
         # Edit button opens the assessments,
         # uses a lambda function to read the entry content when clicked
         tk.Button(action_frame, text='📝', font=('Arial', 11),command=lambda:
-                  self.open_assessments(course_name=name.get())).pack(side='left', padx=4)
+                  self.controller.open_assessments(name)).pack(side='left', padx=4)
 
-        tk.Button(action_frame, text='🗑', font=('Arial', 11), fg='red',command=lambda: self.delete_row(
-            [name, current, desired, required, action_frame])
-                  ).pack(side='left', padx=4)
+        row_widgets = [name, current, desired, required, action_frame]
+        tk.Button(action_frame, text='🗑', font=('Arial', 11), fg='red',
+                  command=lambda: self.controller.delete_course(name, row_widgets)).pack(side='left', padx=4)
         # using lambda function as we need to add arguments,
         # normal function does not allow that.
 
         # Increment the row counter for the next row to be inserted
         self.row_counter += 1
 
-    def open_assessments(self, course_name):
-        """
-        Opens the Assessments popup for a course.
-        """
-        if not course_name:
-            course_name = "New Course" # If the user puts nothing in "course name" field.
-        AssessmentView(self.master, course_name)
-
-    def delete_row(self, widgets):
-        """
-        Confirm and delete a course row.
-        """
-
-        if mb.askyesno("Confirm Delete Course", "Are you sure you want to delete this course? "
-                        "This action cannot be undone. You will lose all progress of this course."):
-            for widget in widgets:
-                widget.destroy()
+        return name
 
 if __name__ == "__main__":
     root = tk.Tk()

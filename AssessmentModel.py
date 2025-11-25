@@ -2,7 +2,7 @@
 A weighted task for some course.
 """
 
-class Assessment:
+class AssessmentModel:
 
     name: str
     weight: float
@@ -32,7 +32,7 @@ class Assessment:
         return self.mark
 
     def __eq__(self, other):
-        if isinstance(other, Assessment):
+        if isinstance(other, AssessmentModel):
             if self.name == other.name and self.weight == other.weight and self.mark == other.mark:
                 return True
         return False

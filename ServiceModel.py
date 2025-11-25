@@ -1,10 +1,10 @@
 import sqlite3
 import pickle
 
-from AssessmentModel import Assessment
-from CourseModel import Course
+from AssessmentModel import AssessmentModel
+from CourseModel import CourseModel
 
-class CourseService:
+class ServiceModel:
 
     conn_str: str
 
@@ -35,7 +35,7 @@ class CourseService:
         conn.commit()
         conn.close()
 
-    def add_course(self, course: Course) -> int:
+    def add_course(self, course: CourseModel) -> int:
         """
         Adds a new course to the database and returns the new Course_Id.
         """
@@ -52,7 +52,7 @@ class CourseService:
         conn.close()
         return new_id
 
-    def update_course(self, course_id: int, course: Course) -> None:
+    def update_course(self, course_id: int, course: CourseModel) -> None:
         """
         Updates the name and desired mark of a specific course.
         """
@@ -68,7 +68,7 @@ class CourseService:
         conn.commit()
         conn.close()
 
-    def get_course(self, course_id: int) -> Course:
+    def get_course(self, course_id: int) -> CourseModel:
         """
         Retrieves a Course object, including all its Assessments populated from the DB.
         """
@@ -96,13 +96,13 @@ class CourseService:
         for a_row in assessment_rows:
             # Unpack row: Name, Weight, Mark
             a_name, a_weight, a_mark = a_row
-            assessments_list.append(Assessment(a_name, a_weight, a_mark))
+            assessments_list.append(AssessmentModel(a_name, a_weight, a_mark))
 
         conn.close()
 
-        return Course(desired_mark, course_name, assessments_list)
+        return CourseModel(desired_mark, course_name, assessments_list)
 
-    def get_all_courses(self) -> list[tuple[int, Course]]:
+    def get_all_courses(self) -> list[tuple[int, CourseModel]]:
         """
         Returns a list of tuples: (Course_Id, Course_Object)
         """
@@ -133,7 +133,7 @@ class CourseService:
         conn.commit()
         conn.close()
 
-    def add_assessment(self, course_id: int, assessment: Assessment) -> int:
+    def add_assessment(self, course_id: int, assessment: AssessmentModel) -> int:
         """
         Adds a new assessment to the database linked to a specific course and returns the new Assessment_Id.
         """
@@ -150,7 +150,7 @@ class CourseService:
         conn.close()
         return new_id
 
-    def update_assessment(self, assessment_id: int, assessment: Assessment) -> None:
+    def update_assessment(self, assessment_id: int, assessment: AssessmentModel) -> None:
         """
         Updates an existing assessment's details.
         """
@@ -168,7 +168,7 @@ class CourseService:
         conn.commit()
         conn.close()
 
-    def get_assessment(self, assessment_id: int) -> Assessment:
+    def get_assessment(self, assessment_id: int) -> AssessmentModel:
         """
         Retrieves a single Assessment object by its DB ID.
         """
@@ -185,8 +185,32 @@ class CourseService:
         conn.close()
 
         if row:
-            return Assessment(row[0], row[1], row[2])
+            return AssessmentModel(row[0], row[1], row[2])
         return None
+
+    def get_assessments_with_ids(self, course_id) -> list[tuple[int, AssessmentModel]]:
+        """
+        Returns a list of tuples (Assessment_Id, AssessmentObject) for a specific course.
+        """
+        conn = sqlite3.connect(self.conn_str)
+        cur = conn.cursor()
+
+        cur.execute("""
+        SELECT Assessment_Id, Assessment_Name, Assessments_Weight, Assessment_Mark 
+        FROM Assessments 
+        WHERE Course_Id = ?
+        """, (course_id,))
+
+        rows = cur.fetchall()
+        conn.close()
+
+        results = []
+        for row in rows:
+            assessment_id, name, weight, mark = row
+            assessment_obj = AssessmentModel(name, weight, mark)
+            results.append((assessment_id, assessment_obj))
+
+        return results
 
     def delete_assessment(self, assessment_id: int) -> None:
         """

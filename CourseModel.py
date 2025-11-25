@@ -2,13 +2,13 @@
 A course taken by a student.
 """
 
-from AssessmentModel import Assessment
+from AssessmentModel import AssessmentModel
 
-class Course:
+class CourseModel:
 
     desired_mark: float
     name: str
-    assessments: list[Assessment]
+    assessments: list[AssessmentModel]
 
     def __init__(self, desired_mark: float=-1, name: str="", assessments: list=None) -> None:
         if assessments is None:
@@ -36,9 +36,9 @@ class Course:
 
     def add_assessment(self, name: str, weight: float, mark: float=-1) -> None:
         if mark != -1:
-            assessment = Assessment(name, weight)
+            assessment = AssessmentModel(name, weight)
         else:
-            assessment = Assessment(name, weight, mark)
+            assessment = AssessmentModel(name, weight, mark)
         self.assessments.append(assessment)
 
     def remove_assessments(self, name: str) -> None:
@@ -46,14 +46,14 @@ class Course:
             if assessment.name == name:
                 self.assessments.remove(assessment)
 
-    def get_assessments(self, name: str) -> Assessment:
+    def get_assessments(self, name: str) -> AssessmentModel:
         for assessment in self.assessments:
             if assessment.name == name:
                 return assessment
         raise ValueError("Assessment is not in this course.")
 
     def __eq__(self, other):
-        if isinstance(other, Course):
+        if isinstance(other, CourseModel):
             if self.name == other.assessments and self.assessments == other.assessments and self.desired_mark == other.desired_mark:
                 return True
         return False
