@@ -34,7 +34,7 @@ class AssessmentView:
                 row=0, column=column_number, pady=(0,10), sticky="ew"
             )
 
-        self.row_counter = 1    # to track rows so we know here to add the new table
+        self.row_counter = 1    # to track rows so we know where to add the new table
 
         # Footer with the add button
         footer = tk.Frame(self.window)
