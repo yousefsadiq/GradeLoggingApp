@@ -52,9 +52,9 @@ class CourseView:
         """
         Detect if the previously focused widget was an Entry and save it
         """
-        focused = self.master.focus_get() # focus_get() retrieves the widget that currently has the keyboard focus in it
-        if isinstance(focused, tk.Entry):
-            focused.event_generate("<FocusOut>")
+        focused = self.master.focus_get()
+        if isinstance(focused, tk.Entry) and event.widget != focused:
+            self.master.focus_set()
 
     def set_controller(self, controller):
         """
@@ -73,7 +73,7 @@ class CourseView:
         # Initializing Entries and Labels. For smoothness and ability to use them as variables
 
         # Course Name ENTRY
-        name = tk.Entry(self.grid_frame, justify='center', font=('Arial', 10))
+        name = tk.Entry(self.grid_frame, justify='center', font=('Arial', 12))
         name.grid(row=r, column=0, padx=5, pady=10, stick='ew')
 
         # Current Grade LABEL

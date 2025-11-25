@@ -52,8 +52,8 @@ class AssessmentView:
         Detect if the previously focused widget was an Entry and save it
         """
         focused = self.window.focus_get()
-        if isinstance(focused, tk.Entry):
-            focused.event_generate("<FocusOut>")
+        if isinstance(focused, tk.Entry) and event.widget != focused:
+            self.window.focus_set()
 
     def set_controller(self, controller):
         """
