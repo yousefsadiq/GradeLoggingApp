@@ -29,7 +29,7 @@ class CourseController:
         Fetches all courses from the local database and populates
         the view.
         """
-        courses = self.service.get_all_courses
+        courses = self.service.get_all_courses()
         for course_id, course_obj in courses:
             key_widget = self.view.add_course_row(course_obj)
             self.row_map[key_widget] = course_id
@@ -80,6 +80,6 @@ class CourseController:
         """
         Opens the Assessment window for the specific course
         """
-        course_id = self.row.map.get(key_widget)
+        course_id = self.row_map.get(key_widget)
         if course_id:
             AssessmentController(self.root, self.service, course_id, self)

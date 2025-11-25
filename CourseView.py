@@ -3,10 +3,6 @@ The UI of the Courses page in the grade logging app
 """
 
 import tkinter as tk
-from tkinter import messagebox as mb
-from CourseModel import CourseModel
-from AssessmentView import AssessmentView
-from CourseController import CourseController
 
 class CourseView:
     def __init__(self, master):
@@ -46,16 +42,16 @@ class CourseView:
         footer = tk.Frame(master)
         footer.pack(pady=20)
         add_button = tk.Button(footer, text="➕", font=("Arial", 16),
-                               command=self.add_course_new)
+                               command=lambda: self.controller.add_course())
         add_button.pack()
 
-    def set_controller(self, controller: CourseController):
+    def set_controller(self, controller):
         """
         Sets a new CourseController for this CourseView.
         """
         self.controller = controller
 
-    def add_course_row(self, course:CourseModel=None):
+    def add_course_row(self, course=None):
         """
         Adds a single row to the course grid.
         """
@@ -110,8 +106,8 @@ class CourseView:
 
         # Edit button opens the assessments,
         # uses a lambda function to read the entry content when clicked
-        tk.Button(action_frame, text='📝', font=('Arial', 11),command=lambda:
-                  self.controller.open_assessments(name)).pack(side='left', padx=4)
+        tk.Button(action_frame, text='📝', font=('Arial', 11),
+                  command=lambda: self.controller.open_assessments(name)).pack(side='left', padx=4)
 
         row_widgets = [name, current, desired, required, action_frame]
         tk.Button(action_frame, text='🗑', font=('Arial', 11), fg='red',

@@ -5,9 +5,6 @@ The UI of the Assessments page in the grade logging app
 import tkinter as tk
 from tkinter import messagebox
 
-from AssessmentController import AssessmentController
-from AssessmentModel import AssessmentModel
-
 class AssessmentView:
     def __init__(self, master, course_name):
         self.window = tk.Toplevel(master)# a Toplevel widget is used to create a new,
@@ -44,17 +41,16 @@ class AssessmentView:
         footer = tk.Frame(self.window)
         footer.pack(pady=20)
         add_button = tk.Button(footer, text="➕", font=("Arial", 16),
-                               command=self.add_assessment
-                               )
+                               command=lambda: self.controller.add_assessment())
         add_button.pack()
 
-    def set_controller(self, controller: AssessmentController):
+    def set_controller(self, controller):
         """
         Sets a new AssessmentController for this AssessmentView.
         """
         self.controller = controller
 
-    def add_assessment_row(self, assessment: AssessmentModel):
+    def add_assessment_row(self, assessment):
         """
         Adds a single table row to the assessment grid.
         """

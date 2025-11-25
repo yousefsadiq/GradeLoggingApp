@@ -3,7 +3,6 @@ from tkinter import messagebox
 
 from AssessmentView import AssessmentView
 from AssessmentModel import AssessmentModel
-from CourseController import CourseController
 from ServiceModel import ServiceModel
 
 class AssessmentController:
@@ -11,7 +10,6 @@ class AssessmentController:
     root: tk.Tk
     service: ServiceModel
     course_id: int
-    course_controller: CourseController
     view = AssessmentView
     row_map: dict
 
@@ -28,9 +26,13 @@ class AssessmentController:
         else:
             course_name = "New Course"
 
+        self.view = AssessmentView(root, course_name)
+        self.view.set_controller(self)
+        self.load_data()
+
     def load_data(self):
         """
-        Access a course to obtain it's assessments list.
+        Access a course to obtain its assessments list.
         """
         assessments_data = self.service.get_assessments_with_ids(self.course_id)
 

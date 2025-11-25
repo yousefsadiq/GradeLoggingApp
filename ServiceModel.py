@@ -27,8 +27,8 @@ class ServiceModel:
             Assessment_Name TEXT,
             Assessment_Mark REAL,
             Assessments_Weight REAL,
-            Course_Id INTEGER NOT NULL
-            FOREIGN KEY (Course_Id) REFERENCES Hospital(Course_Id)
+            Course_Id INTEGER NOT NULL,
+            FOREIGN KEY (Course_Id) REFERENCES Course(Course_Id)
         );
         """)
 
