@@ -129,6 +129,7 @@ class ServiceModel:
         cur = conn.cursor()
 
         cur.execute("PRAGMA foreign_keys = ON")
+        cur.execute("DELETE FROM Assessments WHERE Course_Id = ?", (course_id,))
         cur.execute("DELETE FROM Course WHERE Course_Id = ?", (course_id,))
         conn.commit()
         conn.close()
