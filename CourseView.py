@@ -12,6 +12,9 @@ class CourseView:
         master.title("Grade Logging App")
         master.geometry("1000x600")
 
+        # Click anywhere to save Entry
+        master.bind("<Button-1>", self.save_on_click)
+
         header_frame = tk.Frame(master)
         header_frame.pack(fill='x', padx=20, pady=20)
         tk.Label(header_frame, text="My Courses",
@@ -44,6 +47,14 @@ class CourseView:
         add_button = tk.Button(footer, text="➕", font=("Arial", 16),
                                command=lambda: self.controller.add_course())
         add_button.pack()
+
+    def save_on_click(self, event):
+        """
+        Detect if the previously focused widget was an Entry and save it
+        """
+        focused = self.master.focus_get() # focus_get() retrieves the widget that currently has the keyboard focus in it
+        if isinstance(focused, tk.Entry):
+            focused.event_generate("<FocusOut>")
 
     def set_controller(self, controller):
         """

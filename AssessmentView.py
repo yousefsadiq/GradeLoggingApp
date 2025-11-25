@@ -13,6 +13,9 @@ class AssessmentView:
         self.window.geometry('700x600')
         self.controller = None
 
+        # Bind click anywhere to save Entry
+        self.window.bind("<Button-1>", self.save_on_click)
+
         header_frame = tk.Frame(self.window)
         header_frame.pack(fill='x', padx=20, pady=20)
         tk.Label(header_frame, text="Assessments",
@@ -43,6 +46,14 @@ class AssessmentView:
         add_button = tk.Button(footer, text="➕", font=("Arial", 16),
                                command=lambda: self.controller.add_assessment())
         add_button.pack()
+
+    def save_on_click(self, event):
+        """
+        Detect if the previously focused widget was an Entry and save it
+        """
+        focused = self.window.focus_get()
+        if isinstance(focused, tk.Entry):
+            focused.event_generate("<FocusOut>")
 
     def set_controller(self, controller):
         """
