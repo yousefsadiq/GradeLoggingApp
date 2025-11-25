@@ -59,19 +59,30 @@ class CourseModel:
         return False
 
     def _calculate_mark(self) -> float:
-        marks = []
+        total_score_weighted = 0
+        total_weight_completed = 0
+
         for assessment in self.assessments:
-            if assessment.mark != -1:
-                marks.append((assessment.mark, assessment.weight))
-        final_mark = 0
-        for mark in marks:
-            final_mark += (mark[0] * (mark[1]) / 100)
-        return final_mark
+            if assessment.mark != -1 and assessment.weight != -1:
+                total_score_weighted += (assessment.mark * (assessment.weight / 100))
+                total_weight_completed += assessment.weight
+
+        if total_weight_completed == 0:
+            return 0.0
+        return (total_score_weighted / (total_weight_completed / 100))
 
     def _calculate_mark_needed(self) -> float:
-        weight = 0
+        total_score_weighted = 0
+        total_weight_completed = 0
+
         for assessment in self.assessments:
-            if assessment.mark != -1:
-                weight += assessment.weight
-        remaining_weight = (100 - weight) / 100
-        return (self.desired_mark - self.get_mark() * weight) / remaining_weight
+            if assessment.mark != -1 and assessment.weight != -1:
+                total_score_weighted += (assessment.mark * (assessment.weight / 100))
+                total_weight_completed += assessment.weight
+
+        remaining_weight = 100 - total_weight_completed
+        if remaining_weight <= 0:
+            return 0.0
+        points_needed = self.desired_mark - total_score_weighted
+
+        return (points_needed / remaining_weight) * 100
