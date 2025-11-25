@@ -11,6 +11,7 @@ class AssessmentView:
                                         # independent window separate from the main window
         self.window.title(course_name + " Assessments")
         self.window.geometry('700x600')
+        self.controller = None
 
         header_frame = tk.Frame(self.window)
         header_frame.pack(fill='x', padx=20, pady=20)
@@ -40,11 +41,16 @@ class AssessmentView:
         footer = tk.Frame(self.window)
         footer.pack(pady=20)
         add_button = tk.Button(footer, text="➕", font=("Arial", 16),
-                               command=self.add_assessment
-                               )
+                               command=lambda: self.controller.add_assessment())
         add_button.pack()
 
-    def add_assessment(self):
+    def set_controller(self, controller):
+        """
+        Sets a new AssessmentController for this AssessmentView.
+        """
+        self.controller = controller
+
+    def add_assessment_row(self, assessment):
         """
         Adds a single table row to the assessment grid.
         """
@@ -59,13 +65,31 @@ class AssessmentView:
         weight = tk.Entry(self.grid_frame, justify='center', width=3)
         weight.grid(row=r, column=2, padx=5, stick='ew')
 
-        delete_button = tk.Button(self.grid_frame, text='🗑', fg='red',
-                                  command=lambda: self.delete_row(
-            [name, grade, weight, delete_button])
-                  )
+        # Populate data if an assessment exists
+        if assessment:
+            name.insert(0, assessment.name)
+            if assessment.mark != -1:
+                grade.insert(0, str(assessment.mark))
+            if assessment.weight != -1:
+                weight.insert(0, str(assessment.weight))
+
+        #Bindings
+        save_callback = lambda e: self.controller.update_assessment(name, grade, weight)
+        name.bind("<FocusOut>", save_callback)
+        name.bind("<Return>", save_callback)
+        grade.bind("<FocusOut>", save_callback)
+        grade.bind("<Return>", save_callback)
+        weight.bind("<FocusOut>", save_callback)
+        weight.bind("<Return>", save_callback)
+
+        row_widgets = [name, grade, weight]
+        delete_button = tk.Button(self.grid_frame, text='🗑', fg='red')
+        delete_button.config(command=lambda: self.controller.delete_assessment(name, row_widgets + [delete_button]))
         delete_button.grid(row=r, column=3)
 
         self.row_counter += 1 # So that a new table gets added in the next row.
+
+        return name
 
     def delete_row(self, widgets):
         """
