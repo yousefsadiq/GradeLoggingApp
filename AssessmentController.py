@@ -6,14 +6,15 @@ from AssessmentModel import AssessmentModel
 from ServiceModel import ServiceModel
 
 class AssessmentController:
-
-    root: tk.Tk
+    """
+    A controller class to allow an AssessmentModel and AssessmentView to interact
+    """
     service: ServiceModel
     course_id: int
     view = AssessmentView
     row_map: dict
 
-    def __init__(self, root, service, course_id, course_controller):
+    def __init__(self, root: tk.Tk, service: ServiceModel, course_id: int, course_controller) -> None:
         self.service = service
         self.course_id = course_id
         self.course_controller = course_controller
@@ -30,9 +31,9 @@ class AssessmentController:
         self.view.set_controller(self)
         self.load_data()
 
-    def load_data(self):
+    def load_data(self) -> None:
         """
-        Access a course to obtain its assessments list.
+        Load in a course's list of assessments.
         """
         assessments_data = self.service.get_assessments_with_ids(self.course_id)
 
@@ -41,6 +42,9 @@ class AssessmentController:
             self.row_map[key_widget] = assessment_id
 
     def add_assessment(self):
+        """
+        Add an assessment to the database and this AssessmentController's <view>
+        """
         new_assessment = AssessmentModel(name="New Assessment", weight=0, mark=0)
         new_id = self.service.add_assessment(self.course_id, new_assessment)
 
@@ -49,6 +53,9 @@ class AssessmentController:
         self.course_controller.recalculate_marks(self.course_id)
 
     def update_assessment(self, name_widget, grade_widget, weight_widget):
+        """
+        Update an assessment within the database and this AssessmentController's <view>
+        """
         assessment_id = self.row_map.get(name_widget)
         if not assessment_id:
             return
@@ -69,6 +76,9 @@ class AssessmentController:
             return
 
     def delete_assessment(self, key_widget, row_widgets):
+        """
+        Delete an assessment from the database and from this AssessmentController's <view>
+        """
         if messagebox.askyesno("Delete", "Delete this assessment?"):
             assessment_id = self.row_map.get(key_widget)
             if assessment_id:
@@ -80,8 +90,7 @@ class AssessmentController:
 
     def on_close(self):
         """
-        When the assessments window is closed, the course window
-        should have recalculated grades.
+        When the assessments window is closed, the course window will recalculate grades.
         """
         self.view.window.destroy()
         self.course_controller.recalculate_marks(self.course_id)

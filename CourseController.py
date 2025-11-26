@@ -1,6 +1,3 @@
-"""
-The controller class to allow a CourseModel and CourseView to interact.
-"""
 import tkinter as tk
 from tkinter import messagebox
 
@@ -10,11 +7,15 @@ from AssessmentController import AssessmentController
 from CourseModel import CourseModel
 
 class CourseController:
+    """
+    A controller class to allow a CourseModel and CourseView to interact
+    """
 
     root: tk.Tk
     service: ServiceModel
     view: CourseView
     row_map: dict
+    grade_map: dict
 
     def __init__(self, root: tk.Tk, service: ServiceModel) -> None:
         self.root = root
@@ -25,10 +26,10 @@ class CourseController:
         self.grade_map = {}
         self.load_courses()
 
-    def load_courses(self):
+    def load_courses(self) -> None:
         """
         Fetches all courses from the local database and populates
-        the view.
+        this CourseController's <view>
         """
         courses = self.service.get_all_courses()
         for course_id, course_obj in courses:
@@ -36,9 +37,10 @@ class CourseController:
             self.row_map[key_widget] = course_id
             self.grade_map[course_id] = (curr_mark, req_mark)
 
-    def add_course(self):
+    def add_course(self) -> None:
         """
-        Creates a default course in the database and adds it to the UI.
+        Creates a default course in the database and adds it to
+        this CourseController's <view>.
         """
         course = CourseModel(name="New Course", desired_mark=0.0)
         course_id = self.service.add_course(course)
@@ -47,9 +49,10 @@ class CourseController:
         self.row_map[key_widget] = course_id
         self.grade_map[course_id] = (curr_mark, req_mark)
 
-    def recalculate_marks(self, course_id: int):
+    def recalculate_marks(self, course_id: int) -> None:
         """
-        Recalculates the current and required grade's for a course,
+        Recalculates the current and required grade's for the course
+        corresponding to <course_id>
         """
         course = self.service.get_course(course_id)
         if not course:
@@ -68,9 +71,9 @@ class CourseController:
             else:
                 required_label.config(text="--%")
 
-    def update_course(self, name_widget, desired_widget):
+    def update_course(self, name_widget, desired_widget) -> None:
         """
-        Called when a user edits a field and leaves.
+        Updated this course in the database and this CourseController's <view>
         """
         course_id = self.row_map.get(name_widget)
         if course_id is None:
@@ -88,10 +91,10 @@ class CourseController:
         except ValueError:
             return
 
-    def delete_course(self, key_widget, all_row_widgets):
+    def delete_course(self, key_widget, all_row_widgets) -> None:
         """
-        Deletes a course from the local database and it's row
-        from the UI.
+        Deletes a course from the local database, and it's row
+        from this CourseController's <view>
         """
         if messagebox.askyesno("Confirm Delete", "Are you sure? This cannot be undone."):
             course_id = self.row_map.get(key_widget)
@@ -104,9 +107,10 @@ class CourseController:
                 for widget in all_row_widgets:
                     widget.destroy()
 
-    def open_assessments(self, key_widget):
+    def open_assessments(self, key_widget) -> None:
         """
-        Opens the Assessment window for the specific course
+        Opens the Assessment window for the course specified
+        by key_widget
         """
         course_id = self.row_map.get(key_widget)
         if course_id:

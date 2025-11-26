@@ -1,3 +1,7 @@
+"""
+Grade Logging App
+"""
+
 import tkinter as tk
 from ServiceModel import ServiceModel
 from CourseController import CourseController

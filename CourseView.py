@@ -1,10 +1,10 @@
-"""
-The UI of the Courses page in the grade logging app
-"""
-
 import tkinter as tk
 
 class CourseView:
+    """
+    The UI of the Courses page in the grade logging app
+    """
+
     def __init__(self, master):
         self.master = master
         self.controller = None
@@ -24,7 +24,7 @@ class CourseView:
         self.grid_frame = tk.Frame(master)
         self.grid_frame.pack(fill='both', padx=20, expand=True)
 
-        headers = ["Course Name", "Current Grade", "Desired Grade",
+        headers = ["Course Name", "Current Grade", "Desired Grade (%)",
                    "Required Grade", "Actions"]
 
         # Configure columns, first column gets more space, others get weight 1

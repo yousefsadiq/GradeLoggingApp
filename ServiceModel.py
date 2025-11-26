@@ -1,18 +1,23 @@
 import sqlite3
-import pickle
+from typing import Optional
 
 from AssessmentModel import AssessmentModel
 from CourseModel import CourseModel
 
 class ServiceModel:
+    """
+    A class used to load, save, and update persistence data for
+    courses and assessments.
+    """
 
     conn_str: str
 
-    def __init__(self, conn_str: str):
+    def __init__(self, conn_str: str) -> None:
         self.conn_str = conn_str
         conn = sqlite3.connect(self.conn_str)
         cur = conn.cursor()
 
+        #Creating tables if they don't exist already
         cur.execute("""
         CREATE TABLE IF NOT EXISTS Course (
             Course_Id INTEGER PRIMARY KEY,
@@ -37,7 +42,7 @@ class ServiceModel:
 
     def add_course(self, course: CourseModel) -> int:
         """
-        Adds a new course to the database and returns the new Course_Id.
+        Adds a new course to the database and returns the new Course_Id
         """
         conn = sqlite3.connect(self.conn_str)
         cur = conn.cursor()
@@ -54,7 +59,7 @@ class ServiceModel:
 
     def update_course(self, course_id: int, course: CourseModel) -> None:
         """
-        Updates the name and desired mark of a specific course.
+        Updates the name and desired mark of a specific course
         """
         conn = sqlite3.connect(self.conn_str)
         cur = conn.cursor()
@@ -68,9 +73,9 @@ class ServiceModel:
         conn.commit()
         conn.close()
 
-    def get_course(self, course_id: int) -> CourseModel:
+    def get_course(self, course_id: int) -> Optional[CourseModel]:
         """
-        Retrieves a Course object, including all its Assessments populated from the DB.
+        Retrieves a CourseModel object, including all its Assessments populated from the DB
         """
         conn = sqlite3.connect(self.conn_str)
         cur = conn.cursor()
@@ -123,7 +128,7 @@ class ServiceModel:
 
     def delete_course(self, course_id: int) -> None:
         """
-        Deletes a course and its associated assessments (via Cascade or manual deletion).
+        Deletes a course and its associated assessments
         """
         conn = sqlite3.connect(self.conn_str)
         cur = conn.cursor()
@@ -136,7 +141,8 @@ class ServiceModel:
 
     def add_assessment(self, course_id: int, assessment: AssessmentModel) -> int:
         """
-        Adds a new assessment to the database linked to a specific course and returns the new Assessment_Id.
+        Adds a new assessment to the database linked to a specific course and returns
+        the assessment's id
         """
         conn = sqlite3.connect(self.conn_str)
         cur = conn.cursor()
@@ -171,7 +177,7 @@ class ServiceModel:
 
     def get_assessment(self, assessment_id: int) -> AssessmentModel:
         """
-        Retrieves a single Assessment object by its DB ID.
+        Retrieves a single Assessment object by its id
         """
         conn = sqlite3.connect(self.conn_str)
         cur = conn.cursor()
@@ -191,7 +197,7 @@ class ServiceModel:
 
     def get_assessments_with_ids(self, course_id) -> list[tuple[int, AssessmentModel]]:
         """
-        Returns a list of tuples (Assessment_Id, AssessmentObject) for a specific course.
+        Returns a list of tuples (Assessment_Id, AssessmentObject) for a specific course
         """
         conn = sqlite3.connect(self.conn_str)
         cur = conn.cursor()

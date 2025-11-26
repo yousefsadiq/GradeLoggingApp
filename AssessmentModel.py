@@ -1,8 +1,7 @@
-"""
-A weighted task for some course.
-"""
-
 class AssessmentModel:
+    """
+    A weighted task for a course.
+    """
 
     name: str
     weight: float
@@ -14,25 +13,37 @@ class AssessmentModel:
         self.mark = mark
 
     def set_name(self, name: str) -> None:
+        """
+        Sets this AssessmentModel's <name>
+        """
         self.name = name
 
     def get_name(self) -> str:
+        """
+        Returns this AssessmentModel's <name>
+        """
         return self.name
 
     def set_weight(self, weight: float) -> None:
+        """
+        Sets this AssessmentModel's <weight>
+        """
         self.weight = weight
 
     def get_weight(self) -> float:
+        """
+        Returns this AssessmentModel's <weight>
+        """
         return self.weight
 
     def set_mark(self, mark: float) -> None:
+        """
+        Sets this AssessmentModel's <mark>
+        """
         self.mark = mark
 
     def get_mark(self) -> float:
+        """
+        Returns this AssessmentModel's <mark>
+        """
         return self.mark
-
-    def __eq__(self, other):
-        if isinstance(other, AssessmentModel):
-            if self.name == other.name and self.weight == other.weight and self.mark == other.mark:
-                return True
-        return False

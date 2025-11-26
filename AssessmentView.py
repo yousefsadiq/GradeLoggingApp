@@ -1,11 +1,11 @@
-"""
-The UI of the Assessments page in the grade logging app
-"""
-
 import tkinter as tk
 from tkinter import messagebox
 
 class AssessmentView:
+    """
+    The UI of the Assessments page in the grade logging app
+    """
+
     def __init__(self, master, course_name):
         self.window = tk.Toplevel(master)# a Toplevel widget is used to create a new,
                                         # independent window separate from the main window
