@@ -22,11 +22,16 @@ class CourseModel:
             return self._calculate_mark()
         return -1
 
+    def get_required_mark(self) -> float:
+        if self.assessments:
+            return self._calculate_mark_needed()
+        return -1
+
     def set_desired_mark(self, desired_mark: float) -> None:
         self.desired_mark = desired_mark
 
     def get_desired_mark(self) -> float:
-        return self.mark
+        return self.desired_mark
 
     def set_name(self, name: str) -> None:
         self.name = name

@@ -32,7 +32,7 @@ class AssessmentView:
         self.grid_frame.grid_columnconfigure(3, weight=0) # Actions menu containing edit and delete
 
         # Exact same method of added headers in their columns like in CourseView.py
-        headers = ["Assessment Name", "Grade (%)", "Weight", ""]
+        headers = ["Assessment Name", "Grade (%)", "Weight (%)", ""]
         for column_number, text in enumerate (headers):
             tk.Label(self.grid_frame, text=text, font=('Arial', 10, "bold")).grid(
                 row=0, column=column_number, pady=(0,10), sticky="ew"

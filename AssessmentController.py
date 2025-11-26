@@ -46,6 +46,7 @@ class AssessmentController:
 
         key_widget = self.view.add_assessment_row(new_assessment)
         self.row_map[key_widget] = new_id
+        self.course_controller.recalculate_marks(self.course_id)
 
     def update_assessment(self, name_widget, grade_widget, weight_widget):
         assessment_id = self.row_map.get(name_widget)
@@ -63,6 +64,7 @@ class AssessmentController:
                 weight = -1
             assessment_obj = AssessmentModel(name, weight, mark)
             self.service.update_assessment(assessment_id, assessment_obj)
+            self.course_controller.recalculate_marks(self.course_id)
         except ValueError:
             return
 
@@ -74,6 +76,7 @@ class AssessmentController:
                 del self.row_map[key_widget]
                 for widget in row_widgets:
                     widget.destroy()
+        self.course_controller.recalculate_marks(self.course_id)
 
     def on_close(self):
         """
@@ -81,4 +84,5 @@ class AssessmentController:
         should have recalculated grades.
         """
         self.view.window.destroy()
+        self.course_controller.recalculate_marks(self.course_id)
 

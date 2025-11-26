@@ -100,12 +100,15 @@ class CourseView:
             if course.desired_mark != -1:
                 desired.insert(0, str(course.desired_mark))
             curr_mark = course.get_mark()
+            req_mark = course.get_required_mark()
             if curr_mark != -1:
                 current.config(text=f"{curr_mark:.2f}%")
-            try:
-                req_mark = course._calculate_mark_needed()
+            else:
+                required.config(text="--%")
+
+            if req_mark != -1:
                 required.config(text=f"{req_mark:.2f}%")
-            except:
+            else:
                 required.config(text="--%")
 
         # Bindings
@@ -129,7 +132,7 @@ class CourseView:
         # Increment the row counter for the next row to be inserted
         self.row_counter += 1
 
-        return name
+        return name, current, required
 
 if __name__ == "__main__":
     root = tk.Tk()
